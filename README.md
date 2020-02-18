@@ -87,6 +87,7 @@ docker run \
  --name readsb \
  --device /dev/bus/usb/USB_BUS_NUMBER/USB_DEVICE_NUMBER \
  -p 8080:80 \
+ -p 30005:30005 \
  mikenye/readsb \
  --dcfilter \
  --device-type=rtlsdr \
@@ -113,6 +114,7 @@ docker run \
  --name readsb \
  --device /dev/bus/usb/001/004 \
  -p 8080:80 \
+ -p 30005:30005 \
  mikenye/readsb \
  --dcfilter \
  --device-type=rtlsdr \
@@ -130,7 +132,67 @@ docker run \
  --write-json=/var/run/readsb 
 ```
 
-At this point, you can test to ensure the container is correctly receiving ADSB traffic by issuing the command:
+## Up-and-Running with Docker Compose
+
+Firstly, plug in your USB radio.
+
+Run the command `lsusb` and find your radio. It'll look something like this:
+
+```
+Bus 001 Device 004: ID 0bda:2832 Realtek Semiconductor Corp. RTL2832U DVB-T
+```
+
+Take note of the bus number, and device number. In the output above, its 001 and 004 respectively. This is used in the `devices:` section of the `docker-compose.xml`. Change these in your environment as required.
+
+An example `docker-compose.xml` file is below:
+
+```
+version: '2.0'
+
+networks:
+  adsbnet:
+
+volumes:
+  readsbjsondata:
+
+services:
+  
+  readsb:
+    image: mikenye/readsb:latest
+    tty: true
+    container_name: readsb
+    restart: always
+    devices:
+      - /dev/bus/usb/001/007:/dev/bus/usb/001/007
+    ports:
+      - 8080:80
+      - 30005:30005
+    networks:
+      - adsbnet
+    volumes:
+      - readsbjsondata:/var/run/readsb
+    command:
+      - --dcfilter
+      - --device-type=rtlsdr
+      - --fix
+      - --forward-mlat
+      - --json-location-accuracy=2
+      - --lat=-33.33333
+      - --lon=111.11111
+      - --mlat
+      - --modeac
+      - --ppm=0
+      - --net
+      - --stats-every=3600
+      - --quiet
+      - --write-json=/var/run/readsb
+```
+
+The reason for creating a specific docker network and volume makes it easier to feed data into other containers. This will be explained further below.
+
+## Testing the container
+
+Once running, you can test the container to ensure it is correctly receiving & decoding ADSB traffic by issuing the command:
 
 ```
 docker exec -it readsb viewadsb
@@ -172,64 +234,6 @@ Which should display a departure-lounge-style screen showing all the aircraft be
 Press CTRL-C to escape this screen.
 
 You should also be able to point your web browser at http://dockerhost:8080/ to view the web interface. At the time of writing this readme (readsb v3.8.1), the webapp is still being actively developed. I was able to get a usable interface with Firefox.
-
-
-## Up-and-Running with Docker Compose
-
-Firstly, plug in your USB radio.
-
-Run the command `lsusb` and find your radio. It'll look something like this:
-
-```
-Bus 001 Device 004: ID 0bda:2832 Realtek Semiconductor Corp. RTL2832U DVB-T
-```
-
-Take note of the bus number, and device number. In the output above, its 001 and 004 respectively. This is used in the `devices:` section of the `docker-compose.xml`. Change these in your environment as required.
-
-An example `docker-compose.xml` file is below:
-
-```
-version: '2.0'
-
-networks:
-  adsbnet:
-
-volumes:
-  readsbjsondata:
-
-services:
-  
-  readsb:
-    image: mikenye/readsb:latest
-    tty: true
-    container_name: readsb
-    restart: always
-    devices:
-      - /dev/bus/usb/001/007:/dev/bus/usb/001/007
-    ports:
-      - 8080:80
-    networks:
-      - adsbnet
-    volumes:
-      - readsbjsondata:/var/run/readsb
-    command:
-      - --dcfilter
-      - --device-type=rtlsdr
-      - --fix
-      - --forward-mlat
-      - --json-location-accuracy=2
-      - --lat=-33.33333
-      - --lon=111.11111
-      - --mlat
-      - --modeac
-      - --ppm=0
-      - --net
-      - --stats-every=3600
-      - --quiet
-      - --write-json=/var/run/readsb
-```
-
-The reason for creating a specific docker network and volume makes it easier to feed data into other containers. This will be explained further below.
 
 ## Runtime Command Line Arguments
 
