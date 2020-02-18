@@ -126,8 +126,8 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/${VERSION_S6
 # Copy libraries/binaries from builder containers
 COPY --from=builder_readsb /etc/udev/rules.d/* /etc/udev/rules.d/
 COPY --from=builder_readsb /usr/local/ /usr/local/
-COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/pkgconfig/libiio.pc /usr/lib/x86_64-linux-gnu/pkgconfig/libiio.pc
-COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/libiio.* /usr/lib/x86_64-linux-gnu/
+COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/pkgconfig/libiio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig/libiio.pc
+COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/libiio.* /usr/lib/arm-linux-gnueabihf/
 COPY --from=builder_readsb /usr/bin/iio* /usr/bin/
 COPY --from=builder_readsb /usr/sbin/iiod /usr/sbin/iiod
 COPY --from=builder_readsb /src/readsb/webapp/src /var/www/readsb
