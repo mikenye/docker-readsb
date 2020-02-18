@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv sh
+
+/usr/sbin/nginx 2>&1 | awk '{print "[webapp] " $0}'
+
