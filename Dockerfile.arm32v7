@@ -46,7 +46,8 @@ RUN echo ======== BUILDING BLADERF ${BRANCH_BLADERF} ======== && \
 FROM debian:stable-slim AS builder_readsb
 ENV BRANCH_LIBIIO=v0.18 \
     BRANCH_LIBAD9361IIO=v0.2 \
-    BRANCH_READSB=v3.8.1
+    BRANCH_READSB=v3.8.1 \
+    BRANCH_READSB_WEBAPP=dev
 COPY --from=builder_rtlsdr /etc/udev/rules.d/rtl-sdr.rules /etc/udev/rules.d/rtl-sdr.rules
 COPY --from=builder_rtlsdr /usr/local/lib/pkgconfig/librtlsdr.pc /usr/local/lib/pkgconfig/librtlsdr.pc
 COPY --from=builder_rtlsdr /usr/local/include/rtl-sdr.h /usr/local/include/rtl-sdr.h
@@ -108,10 +109,8 @@ RUN echo ======== BUILDING LIBIIO ${BRANCH_LIBIIO} ======== && \
     cp -v /src/readsb/readsb /usr/local/bin/readsb && \
     cp -v /src/readsb/viewadsb /usr/local/bin/viewadsb && \
     echo ======== BUILDING READSB WEBAPP ${BRANCH_READSB} ======== && \
-    cd /src/readsb/webapp && \
-    npm install && \
-    npm run build && \
-    npm install source-map
+    git clone -b ${BRANCH_READSB_WEBAPP} --depth 1 https://github.com/Mictronics/readsb.git /src/readsb_webapp && \
+    cd /src/readsb_webapp/webapp
 
 # Build final container image
 FROM debian:stable-slim AS final
@@ -130,7 +129,7 @@ COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/pkgconfig/libiio.pc /usr
 COPY --from=builder_readsb /usr/lib/arm-linux-gnueabihf/libiio.* /usr/lib/arm-linux-gnueabihf/
 COPY --from=builder_readsb /usr/bin/iio* /usr/bin/
 COPY --from=builder_readsb /usr/sbin/iiod /usr/sbin/iiod
-COPY --from=builder_readsb /src/readsb/webapp/src /var/www/readsb
+COPY --from=builder_readsb /src/readsb_webapp/webapp/src /var/www/readsb
 
 RUN echo ======== CONFIGURING FINAL IMAGE ======== && \
     ldconfig -v && \
