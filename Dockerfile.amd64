@@ -47,7 +47,7 @@ FROM debian:stable-slim AS builder_readsb
 ENV BRANCH_LIBIIO=v0.18 \
     BRANCH_LIBAD9361IIO=v0.2 \
     BRANCH_READSB=v3.8.1 \
-    BRANCH_READSB_WEBAPP=dev \
+    BRANCH_READSB_WEBAPP=dev
 COPY --from=builder_rtlsdr /etc/udev/rules.d/rtl-sdr.rules /etc/udev/rules.d/rtl-sdr.rules
 COPY --from=builder_rtlsdr /usr/local/lib/pkgconfig/librtlsdr.pc /usr/local/lib/pkgconfig/librtlsdr.pc
 COPY --from=builder_rtlsdr /usr/local/include/rtl-sdr.h /usr/local/include/rtl-sdr.h
