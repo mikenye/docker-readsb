@@ -1,5 +1,5 @@
 # mikenye/readsb
-[Mictronics' `readsb`](https://github.com/Mictronics/readsb) Mode-S/ADSB/TIS decoder for RTLSDR, BladeRF, Modes-Beast and GNS5894 devices, running in a docker container. 
+[Mictronics' `readsb`](https://github.com/Mictronics/readsb) Mode-S/ADSB/TIS decoder for RTLSDR, BladeRF, Modes-Beast and GNS5894 devices, running in a docker container.
 
 Support for RTLSDR, bladeRF and plutoSDR is compiled in. Builds and runs on x86_64, arm32v7 and arm64v8 (see below).
 
@@ -18,15 +18,20 @@ Tested and working on:
  * bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Supported tags and respective Dockerfiles
-* `latest`, `v3.8.1`
-  * `latest-amd64`, `3.8.0-amd64` (`3.8.1` branch, `Dockerfile.amd64`)
-  * `latest-arm32v7`, `3.8.0-arm32v7` (`3.8.1` branch, `Dockerfile.arm32v7`)
-  * `latest-arm64v8`, `3.8.0-arm64v8` (`3.8.1` branch, `Dockerfile.arm64v8`)
-* `development` (`master` branch, `Dockerfile.amd64`, `amd64` architecture only, not recommended for production)
+* `latest` should always contain the latest released versions of `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb`. This image is built nightly from the [`master` branch](https://github.com/mikenye/docker-readsb) [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile) for all supported architectures.
+* `development` ([`master` branch](https://github.com/mikenye/docker-readsb/tree/master), [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile), `amd64` architecture only, built on commit, not recommended for production)
+* Specific version and architecture tags are available if required, however these are not regularly updated. It is generally recommended to run `latest`.
 
 ## Changelog
 
-### v3.8.1
+### 20200317
+ * Move to single Dockerfile for multi architecture
+ * Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
+ * Include `gpg` verification of `s6-overlay`
+ * Increase verbosity of docker build output
+ * Change build process to use `docker buildx`
+
+### 20200218
  * Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).
 
 ## Multi Architecture Support
@@ -129,7 +134,7 @@ docker run \
  --net \
  --stats-every=3600 \
  --quiet \
- --write-json=/var/run/readsb 
+ --write-json=/var/run/readsb
 ```
 
 ## Up-and-Running with Docker Compose
@@ -156,7 +161,7 @@ volumes:
   readsbjsondata:
 
 services:
-  
+
   readsb:
     image: mikenye/readsb:latest
     tty: true
