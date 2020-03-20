@@ -1,44 +1,57 @@
 # mikenye/readsb
+
 [Mictronics' `readsb`](https://github.com/Mictronics/readsb) Mode-S/ADSB/TIS decoder for RTLSDR, BladeRF, Modes-Beast and GNS5894 devices, running in a docker container.
 
 Support for RTLSDR, bladeRF and plutoSDR is compiled in. Builds and runs on x86_64, arm32v7 and arm64v8 (see below).
 
 This image will configure a software-defined radio (SDR) to receive and decode Mode-S/ADSB/TIS data from aircraft within range, for use with other services such as:
- * `mikenye/adsbexchange` to feed ADSB data to [adsbexchange.com](https://adsbexchange.com)
- * `mikenye/piaware` to feed ADSB data into [flightaware.com](https://flightaware.com)
- * `mikenye/fr24feed` to feed ADSB data into [flightradar24.com](https://www.flightradar24.com)
- * `mikenye/piaware-to-influx` to feed data into your own instance of [InfluxDB](https://docs.influxdata.com/influxdb/), for visualisation with [Grafana](https://grafana.com) and/or other tools
- * Any other tools that can receive Beast, BeastReduce, Basestation or the raw data feed from `readsb` or `dump1090` and their variants
+
+* `mikenye/adsbexchange` to feed ADSB data to [adsbexchange.com](https://adsbexchange.com)
+* `mikenye/piaware` to feed ADSB data into [flightaware.com](https://flightaware.com)
+* `mikenye/fr24feed` to feed ADSB data into [flightradar24.com](https://www.flightradar24.com)
+* `mikenye/piaware-to-influx` to feed data into your own instance of [InfluxDB](https://docs.influxdata.com/influxdb/), for visualisation with [Grafana](https://grafana.com) and/or other tools
+* Any other tools that can receive Beast, BeastReduce, Basestation or the raw data feed from `readsb` or `dump1090` and their variants
 
 Tested and working on:
- * `x86_64` (`amd64`) platform running Ubuntu 16.04.4 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
- * `armv7l` (`arm32v7`) platform (Odroid HC1) running Ubuntu 18.04.1 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
- * `aarch64` (`arm64v8`) platform (Raspberry Pi 4) running Raspbian Buster 64-bit using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
- * If you run on a different platform (or if you have issues) please raise an issue and let me know!
- * bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
+
+* `x86_64` (`amd64`) platform running Ubuntu 16.04.4 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
+* `armv7l` (`arm32v7`) platform (Odroid HC1) running Ubuntu 18.04.1 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
+* `aarch64` (`arm64v8`) platform (Raspberry Pi 4) running Raspbian Buster 64-bit using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
+* If you run on a different platform (or if you have issues) please raise an issue and let me know!
+* bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Supported tags and respective Dockerfiles
+
 * `latest` should always contain the latest released versions of `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb`. This image is built nightly from the [`master` branch](https://github.com/mikenye/docker-readsb) [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile) for all supported architectures.
 * `development` ([`master` branch](https://github.com/mikenye/docker-readsb/tree/master), [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile), `amd64` architecture only, built on commit, not recommended for production)
 * Specific version and architecture tags are available if required, however these are not regularly updated. It is generally recommended to run `latest`.
 
 ## Changelog
 
+### 20200320
+
+* Remove `/src/*` during container build, to reduce size of container
+* Linting & clean-up
+
 ### 20200317
- * Move to single Dockerfile for multi architecture
- * Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
- * Include `gpg` verification of `s6-overlay`
- * Increase verbosity of docker build output
- * Change build process to use `docker buildx`
+
+* Move to single Dockerfile for multi architecture
+* Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
+* Include `gpg` verification of `s6-overlay`
+* Increase verbosity of docker build output
+* Change build process to use `docker buildx`
 
 ### 20200218
- * Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).
+
+* Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).
 
 ## Multi Architecture Support
+
 Currently, this image should pull and run on the following architectures:
- * ```amd64```: Linux x86-64
- * ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
- * ```arm64v8```, ```aarch64```: ARMv8 64-bit (RPi 3B+/4)
+
+* ```amd64```: Linux x86-64
+* ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+* ```arm64v8```, ```aarch64```: ARMv8 64-bit (RPi 3B+/4)
 
 ## Prerequisites
 
@@ -46,7 +59,7 @@ Before this container will work properly, you must blacklist the kernel modules 
 
 To do this, create a file `/etc/modprobe.d/blacklist-rtl2832.conf` containing the following:
 
-```
+```shell
 # Blacklist RTL2832 so docker container readsb can use the device
 
 blacklist rtl2832
@@ -65,7 +78,7 @@ rtlsdr: error opening the RTLSDR device: Device or resource busy
 
 If you get the error above even after blacklisting the kernel modules as outlined above, the modules may still be loaded. You can unload them by running the following commands:
 
-```
+```shell
 sudo rmmod rtl2832_sdr
 sudo rmmod dvb_usb_rtl28xxu
 sudo rmmod rtl2832
@@ -85,7 +98,7 @@ Take note of the bus number, and device number. In the output above, its 001 and
 
 Start the docker container, passing through the USB device:
 
-```
+```shell
 docker run \
  -d \
  --rm \
@@ -112,7 +125,7 @@ docker run \
 
 For example, based on the `lsusb` output above:
 
-```
+```shell
 docker run \
  -d \
  --rm \
@@ -143,7 +156,7 @@ Firstly, plug in your USB radio.
 
 Run the command `lsusb` and find your radio. It'll look something like this:
 
-```
+```shell
 Bus 001 Device 004: ID 0bda:2832 Realtek Semiconductor Corp. RTL2832U DVB-T
 ```
 
@@ -151,7 +164,7 @@ Take note of the bus number, and device number. In the output above, its 001 and
 
 An example `docker-compose.xml` file is below:
 
-```
+```shell
 version: '2.0'
 
 networks:
@@ -199,7 +212,7 @@ The reason for creating a specific docker network and volume makes it easier to 
 
 Once running, you can test the container to ensure it is correctly receiving & decoding ADSB traffic by issuing the command:
 
-```
+```shell
 docker exec -it readsb viewadsb
 ```
 
@@ -236,15 +249,15 @@ Which should display a departure-lounge-style screen showing all the aircraft be
  7C77F6 S           QFA595     grnd 112  014                   -33.2     2  2
 ```
 
-Press CTRL-C to escape this screen.
+Press `CTRL-C` to escape this screen.
 
-You should also be able to point your web browser at http://dockerhost:8080/ to view the web interface. At the time of writing this readme (readsb v3.8.1), the webapp is still being actively developed. I was able to get a usable interface with Firefox.
+You should also be able to point your web browser at `http://dockerhost:8080/` to view the web interface. At the time of writing this readme (readsb v3.8.1), the webapp is still being actively developed. I was able to get a usable interface with Firefox.
 
 ## Runtime Command Line Arguments
 
 To get a list of command line arguments, you can issue the following command:
 
-```
+```shell
 docker run --rm -it mikenye/readsb --help
 ```
 
@@ -263,4 +276,5 @@ The following default ports are used by readsb and this container:
 * `30104` - readsb TCP Beast input listen port - optional, recommended to leave unmapped unless explicitly needed
 
 ## Logging
-All logs are to the container's log. It is recommended to enable docker log rotation to prevent container logs from filling up your hard drive. See https://success.docker.com/article/how-to-setup-log-rotation-post-installation for details on how to achieve this.
+
+All logs are to the container's log. It is recommended to enable docker log rotation to prevent container logs from filling up your hard drive. See [How-to-setup-log-rotation-post-installation](https://success.docker.com/article/how-to-setup-log-rotation-post-installation) for details on how to achieve this.
