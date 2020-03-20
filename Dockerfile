@@ -4,38 +4,40 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     S6_CMD_ARG0=/usr/local/bin/readsb
 
 RUN set -x && \
-    apt-get update -y && apt-get install -y --no-install-recommends \
-        git \
+    apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        bison \
         ca-certificates \
-        make \
         cmake \
+        curl \
+        g++ \
         gcc \
+        gnupg \
         libc-dev \
+        libedit-dev \
+        libfl-dev \
+        libncurses-dev \
+        libncurses6 \
+        libtecla-dev \
+        libtecla1 \
         libusb-1.0-0 \
         libusb-1.0-0-dev \
-        g++ \
-        libtecla1 \
-        libtecla-dev \
-        libedit-dev \
         libxml2 \
         libxml2-dev \
-        libfl-dev \
-        bison \
-        pkg-config \
-        libncurses6 \
-        libncurses-dev \
-        npm \
-        nodejs \
-        node-typescript \
+        make \
         nginx-light \
-        gnupg \
-        curl && \
+        node-typescript \
+        nodejs \
+        npm \
+        pkg-config \
+        git \
+        && \
     git config --global advice.detachedHead false && \
     echo "========== Building RTL-SDR ==========" && \
     git clone git://git.osmocom.org/rtl-sdr.git /src/rtl-sdr && \
     cd /src/rtl-sdr && \
     export BRANCH_RTLSDR=$(git tag --sort="-creatordate" | head -1) && \
-    git checkout tags/${BRANCH_RTLSDR} && \
+    git checkout "tags/${BRANCH_RTLSDR}" && \
     echo "rtl-sdr ${BRANCH_RTLSDR}" >> /VERSIONS && \
     mkdir -p /src/rtl-sdr/build && \
     cd /src/rtl-sdr/build && \
@@ -47,7 +49,7 @@ RUN set -x && \
     git clone --recursive https://github.com/Nuand/bladeRF.git /src/bladeRF && \
     cd /src/bladeRF && \
     export BRANCH_BLADERF=$(git tag --sort="-creatordate" | head -1) && \
-    git checkout ${BRANCH_BLADERF} && \
+    git checkout "${BRANCH_BLADERF}" && \
     echo "bladeRF ${BRANCH_BLADERF}" >> /VERSIONS && \
     mkdir /src/bladeRF/host/build && \
     cd /src/bladeRF/host/build && \
@@ -58,27 +60,27 @@ RUN set -x && \
     git clone https://github.com/analogdevicesinc/libiio.git /src/libiio && \
     cd /src/libiio && \
     export BRANCH_LIBIIO=$(git tag --sort="-creatordate" | head -1) && \
-    git checkout ${BRANCH_LIBIIO} && \
+    git checkout "${BRANCH_LIBIIO}" && \
     echo "libiio ${BRANCH_LIBIIO}" >> /VERSIONS && \
     cmake PREFIX=/usr/local ./ && \
-    make -j && \
-    make -j install && \
+    make && \
+    make install && \
     echo "========== Building libad9361-iio ==========" && \
     git clone https://github.com/analogdevicesinc/libad9361-iio.git /src/libad9361-iio && \
     cd /src/libad9361-iio && \
     export BRANCH_LIBAD9361IIO=$(git tag --sort="-creatordate" | head -1) && \
-    git checkout ${BRANCH_LIBAD9361IIO} && \
+    git checkout "${BRANCH_LIBAD9361IIO}" && \
     echo "libad9361-iio ${BRANCH_LIBAD9361IIO}" >> /VERSIONS && \
     cmake ./ && \
-    make -j && \
-    make -j install && \
+    make && \
+    make install && \
     echo "========== Building readsb ==========" && \
     git clone https://github.com/Mictronics/readsb.git /src/readsb && \
     cd /src/readsb && \
     export BRANCH_READSB=$(git tag --sort="-creatordate" | head -1) && \
-    git checkout ${BRANCH_READSB} && \
+    git checkout "${BRANCH_READSB}" && \
     echo "readsb ${BRANCH_READSB}" >> /VERSIONS && \
-    make -j RTLSDR=yes BLADERF=yes PLUTOSDR=yes HAVE_BIASTEE=yes && \
+    make RTLSDR=yes BLADERF=yes PLUTOSDR=yes HAVE_BIASTEE=yes && \
     cp -v /src/readsb/readsb /usr/local/bin/readsb && \
     cp -v /src/readsb/viewadsb /usr/local/bin/viewadsb && \
     echo "========== Final Config ==========" && \
@@ -87,25 +89,26 @@ RUN set -x && \
     curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
     echo "========== Clean-up ==========" && \
     apt-get remove -y \
-        git \
-        make \
-        cmake \
-        gcc \
-        libc-dev \
-        libusb-1.0-0-dev \
-        g++ \
-        libtecla-dev \
-        libedit-dev \
-        libxml2-dev \
-        libfl-dev \
         bison \
-        pkg-config \
-        libncurses-dev \
-        npm \
-        nodejs \
-        node-typescript \
+        cmake \
+        curl \
+        g++ \
+        gcc \
+        git \
         gnupg \
-        curl && \
+        libc-dev \
+        libedit-dev \
+        libfl-dev \
+        libncurses-dev \
+        libtecla-dev \
+        libusb-1.0-0-dev \
+        libxml2-dev \
+        make \
+        node-typescript \
+        nodejs \
+        npm \
+        pkg-config \
+        && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     cat /VERSIONS
