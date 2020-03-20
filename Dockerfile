@@ -107,7 +107,7 @@ RUN set -x && \
         gnupg \
         curl && \
     apt-get autoremove -y && \
-    rm -rf /tmp/* /var/lib/apt/lists/* && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     cat /VERSIONS
 
 # Copy config files
