@@ -37,9 +37,9 @@ RUN set -x && \
     git clone git://git.osmocom.org/rtl-sdr.git /src/rtl-sdr && \
     cd /src/rtl-sdr && \
     #export BRANCH_RTLSDR=$(git tag --sort="-creatordate" | head -1) && \
-    BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320"
+    BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320" && \
     #git checkout "tags/${BRANCH_RTLSDR}" && \
-    git checkout "${BRANCH_RTLSDR}"
+    git checkout "${BRANCH_RTLSDR}" && \
     echo "rtl-sdr ${BRANCH_RTLSDR}" >> /VERSIONS && \
     mkdir -p /src/rtl-sdr/build && \
     cd /src/rtl-sdr/build && \
