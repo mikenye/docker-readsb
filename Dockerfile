@@ -1,7 +1,12 @@
-FROM debian:stable-slim AS builder_rtlsdr
+FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
-    S6_CMD_ARG0=/usr/local/bin/readsb
+    S6_CMD_ARG0=/usr/local/bin/readsb \
+    BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320"
+
+# Note, the specific commit of rtlsdr is to address issue #3
+# See: https://github.com/mikenye/docker-readsb/issues/3
+# This should be revisited in future when rtlsdr 0.6.1 or newer is released
 
 RUN set -x && \
     apt-get update -y && \
@@ -37,7 +42,6 @@ RUN set -x && \
     git clone git://git.osmocom.org/rtl-sdr.git /src/rtl-sdr && \
     cd /src/rtl-sdr && \
     #export BRANCH_RTLSDR=$(git tag --sort="-creatordate" | head -1) && \
-    BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320" && \
     #git checkout "tags/${BRANCH_RTLSDR}" && \
     git checkout "${BRANCH_RTLSDR}" && \
     echo "rtl-sdr ${BRANCH_RTLSDR}" >> /VERSIONS && \
