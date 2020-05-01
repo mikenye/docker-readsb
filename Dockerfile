@@ -1,4 +1,4 @@
-FROM debian:stable-slim AS builder_rtlsdr
+FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     S6_CMD_ARG0=/usr/local/bin/readsb
@@ -56,6 +56,17 @@ RUN set -x && \
     cmake -DTREAT_WARNINGS_AS_ERRORS=OFF ../ && \
     make && \
     make install && \
+    echo "========== Downloading bladeRF FPGA Images ==========" && \
+    BLADERF_RBF_PATH="/usr/share/Nuand/bladeRF" && \
+    mkdir -p "$BLADERF_RBF_PATH" && \
+    curl -o $BLADERF_RBF_PATH/hostedxA4.rbf https://www.nuand.com/fpga/hostedxA4-latest.rbf && \
+    curl -o $BLADERF_RBF_PATH/hostedxA9.rbf https://www.nuand.com/fpga/hostedxA9-latest.rbf && \
+    curl -o $BLADERF_RBF_PATH/hostedx40.rbf https://www.nuand.com/fpga/hostedx40-latest.rbf && \
+    curl -o $BLADERF_RBF_PATH/hostedx115.rbf https://www.nuand.com/fpga/hostedx115-latest.rbf && \
+    curl -o $BLADERF_RBF_PATH/adsbxA4.rbf https://www.nuand.com/fpga/adsbxA4.rbf && \
+    curl -o $BLADERF_RBF_PATH/adsbxA9.rbf https://www.nuand.com/fpga/adsbxA9.rbf && \
+    curl -o $BLADERF_RBF_PATH/adsbx40.rbf https://www.nuand.com/fpga/adsbx40.rbf && \
+    curl -o $BLADERF_RBF_PATH/adsbx115.rbf https://www.nuand.com/fpga/adsbx115.rbf && \
     echo "========== Building libiio ==========" && \
     git clone https://github.com/analogdevicesinc/libiio.git /src/libiio && \
     cd /src/libiio && \
