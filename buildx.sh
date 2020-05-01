@@ -12,7 +12,7 @@ docker buildx use homecluster
 # Build & push latest
 docker buildx build -t "${REPO}/${IMAGE}:latest" --compress --push --platform "${PLATFORMS}" .
 
-# Get piaware version from latest
+# Get readsb version from latest
 docker pull "${REPO}/${IMAGE}:latest"
 VERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:latest" /VERSIONS | grep readsb | cut -d " " -f 2)
 
