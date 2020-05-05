@@ -59,7 +59,11 @@ RUN set -x && \
     echo "bladeRF ${BRANCH_BLADERF}" >> /VERSIONS && \
     mkdir /src/bladeRF/host/build && \
     cd /src/bladeRF/host/build && \
-    cmake -DTREAT_WARNINGS_AS_ERRORS=OFF ../ && \
+    cmake \
+        -DTREAT_WARNINGS_AS_ERRORS=OFF \
+        -DCMAKE_BUILD_TYPE=Release \
+        ../ \
+        && \
     make && \
     make install && \
     echo "========== Downloading bladeRF FPGA Images ==========" && \
@@ -100,6 +104,8 @@ RUN set -x && \
     make RTLSDR=yes BLADERF=yes PLUTOSDR=yes HAVE_BIASTEE=yes && \
     cp -v /src/readsb/readsb /usr/local/bin/readsb && \
     cp -v /src/readsb/viewadsb /usr/local/bin/viewadsb && \
+    mkdir -p /usr/share/readsb/bladerf && \
+    cp -v /src/readsb/bladerf/*.rbf /usr/share/readsb/bladerf/ && \
     echo "========== Final Config ==========" && \
     rm -v /etc/nginx/sites-enabled/default && \
     ln -vs /etc/nginx/sites-available/readsb /etc/nginx/sites-enabled/readsb && \
