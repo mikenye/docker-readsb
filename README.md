@@ -101,7 +101,7 @@ docker run \
  --net \
  --stats-every=3600 \
  --quiet \
- --write-json=/var/run/readsb
+ --write-json=/run/readsb
 ```
 
 For example, based on the `lsusb` output above:
@@ -128,7 +128,7 @@ docker run \
  --net \
  --stats-every=3600 \
  --quiet \
- --write-json=/var/run/readsb
+ --write-json=/run/readsb
 ```
 
 ## Up-and-Running with Docker Compose
@@ -184,7 +184,7 @@ services:
       - --net
       - --stats-every=3600
       - --quiet
-      - --write-json=/var/run/readsb
+      - --write-json=/run/readsb
 ```
 
 The reason for creating a specific docker network and volume makes it easier to feed data into other containers. This will be explained further below.
@@ -248,7 +248,7 @@ The command line variables given in the examples above should work for the vast 
 
 The following default ports are used by readsb and this container:
 
-* `8080` - readsb webapp - optional but recommended so you can look at the pretty maps and watch the planes fly around.
+* `8080` - readsb webapp - optional but recommended so you can look at the pretty maps and watch the planes fly around. For the web interface to function, you must include the command line argument `--write-json=/run/readsb`.
 * `30001` - readsb TCP raw input listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30002` - readsb TCP raw output listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30003` - readsb TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
