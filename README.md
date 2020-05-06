@@ -26,33 +26,6 @@ Tested and working on:
 * `development` ([`master` branch](https://github.com/mikenye/docker-readsb/tree/master), [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile), `amd64` architecture only, built on commit, not recommended for production)
 * Specific version and architecture tags are available if required, however these are not regularly updated. It is generally recommended to run `latest`.
 
-## Changelog
-
-### 20200501
-
-* Add bladeRF FPGA images
-
-### 20200429
-
-* Change version of `rtl-sdr` to address incompatibility with `RTL2838UHIDIR` hardware. Thanks to Ryan Guzy for troubleshooting.
-
-### 20200320
-
-* Remove `/src/*` during container build, to reduce size of container
-* Linting & clean-up
-
-### 20200317
-
-* Move to single Dockerfile for multi architecture
-* Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
-* Include `gpg` verification of `s6-overlay`
-* Increase verbosity of docker build output
-* Change build process to use `docker buildx`
-
-### 20200218
-
-* Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).
-
 ## Multi Architecture Support
 
 Currently, this image should pull and run on the following architectures:
@@ -112,7 +85,7 @@ docker run \
  --rm \
  --name readsb \
  --device /dev/bus/usb/USB_BUS_NUMBER/USB_DEVICE_NUMBER \
- -p 8080:80 \
+ -p 8080:8080 \
  -p 30005:30005 \
  mikenye/readsb \
  --dcfilter \
@@ -128,7 +101,7 @@ docker run \
  --net \
  --stats-every=3600 \
  --quiet \
- --write-json=/var/run/readsb
+ --write-json=/run/readsb
 ```
 
 For example, based on the `lsusb` output above:
@@ -139,7 +112,7 @@ docker run \
  --rm \
  --name readsb \
  --device /dev/bus/usb/001/004 \
- -p 8080:80 \
+ -p 8080:8080 \
  -p 30005:30005 \
  mikenye/readsb \
  --dcfilter \
@@ -155,7 +128,7 @@ docker run \
  --net \
  --stats-every=3600 \
  --quiet \
- --write-json=/var/run/readsb
+ --write-json=/run/readsb
 ```
 
 ## Up-and-Running with Docker Compose
@@ -191,7 +164,7 @@ services:
     devices:
       - /dev/bus/usb/001/007:/dev/bus/usb/001/007
     ports:
-      - 8080:80
+      - 8080:8080
       - 30005:30005
     networks:
       - adsbnet
@@ -211,7 +184,7 @@ services:
       - --net
       - --stats-every=3600
       - --quiet
-      - --write-json=/var/run/readsb
+      - --write-json=/run/readsb
 ```
 
 The reason for creating a specific docker network and volume makes it easier to feed data into other containers. This will be explained further below.
@@ -275,7 +248,7 @@ The command line variables given in the examples above should work for the vast 
 
 The following default ports are used by readsb and this container:
 
-* `80` - readsb webapp - optional but recommended so you can look at the pretty maps and watch the planes fly around.
+* `8080` - readsb webapp - optional but recommended so you can look at the pretty maps and watch the planes fly around. For the web interface to function, you must include the command line argument `--write-json=/run/readsb`.
 * `30001` - readsb TCP raw input listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30002` - readsb TCP raw output listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30003` - readsb TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
@@ -286,3 +259,38 @@ The following default ports are used by readsb and this container:
 ## Logging
 
 All logs are to the container's log. It is recommended to enable docker log rotation to prevent container logs from filling up your hard drive. See [How-to-setup-log-rotation-post-installation](https://success.docker.com/article/how-to-setup-log-rotation-post-installation) for details on how to achieve this.
+
+## Getting help
+
+Please feel free to [open an issue on the project's GitHub](https://github.com/mikenye/docker-readsb/issues).
+
+## Changelog
+
+### 20200506
+
+* Fix web interface. Web interface port changed from `80` to `8080`.
+
+### 20200501
+
+* Add bladeRF FPGA images
+
+### 20200429
+
+* Change version of `rtl-sdr` to address incompatibility with `RTL2838UHIDIR` hardware. Thanks to Ryan Guzy for troubleshooting.
+
+### 20200320
+
+* Remove `/src/*` during container build, to reduce size of container
+* Linting & clean-up
+
+### 20200317
+
+* Move to single Dockerfile for multi architecture
+* Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
+* Include `gpg` verification of `s6-overlay`
+* Increase verbosity of docker build output
+* Change build process to use `docker buildx`
+
+### 20200218
+
+* Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).

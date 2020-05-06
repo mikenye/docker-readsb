@@ -1,5 +1,0 @@
-#!/usr/bin/with-contenv sh
-#shellcheck shell=sh
-
-exec \
-  /usr/sbin/nginx 2>&1 | awk '{print "[webapp] " $0}'
