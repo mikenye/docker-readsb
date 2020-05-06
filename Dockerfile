@@ -30,10 +30,7 @@ RUN set -x && \
         libxml2 \
         libxml2-dev \
         make \
-        nginx-light \
-        node-typescript \
-        nodejs \
-        npm \
+        lighttpd \
         pkg-config \
         git \
         && \
@@ -106,9 +103,13 @@ RUN set -x && \
     cp -v /src/readsb/viewadsb /usr/local/bin/viewadsb && \
     mkdir -p /usr/share/readsb/bladerf && \
     cp -v /src/readsb/bladerf/*.rbf /usr/share/readsb/bladerf/ && \
-    echo "========== Final Config ==========" && \
-    rm -v /etc/nginx/sites-enabled/default && \
-    ln -vs /etc/nginx/sites-available/readsb /etc/nginx/sites-enabled/readsb && \
+    echo "========== Install readsb webapp ==========" && \
+    mkdir -p /usr/share/readsb/html && \
+    cp -Rv /src/readsb/webapp/src/* /usr/share/readsb/html/ && \
+    ln -s /etc/lighttpd/conf-available/01-setenv.conf /etc/lighttpd/conf-enabled/01-setenv.conf && \
+    cp -v /src/readsb/debian/lighttpd/* /etc/lighttpd/conf-enabled/ && \
+    mkdir -p /run/readsb && \
+    echo "========== Deploy s6-overlay ==========" && \
     curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
     echo "========== Clean-up ==========" && \
     apt-get remove -y \
@@ -127,9 +128,6 @@ RUN set -x && \
         libusb-1.0-0-dev \
         libxml2-dev \
         make \
-        node-typescript \
-        nodejs \
-        npm \
         pkg-config \
         && \
     apt-get autoremove -y && \
@@ -140,7 +138,7 @@ RUN set -x && \
 COPY etc/ /etc/
 
 # Expose ports
-EXPOSE 30104/tcp 80/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp
+EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
