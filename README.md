@@ -151,9 +151,6 @@ version: '2.0'
 networks:
   adsbnet:
 
-volumes:
-  readsbjsondata:
-
 services:
 
   readsb:
@@ -168,8 +165,6 @@ services:
       - 30005:30005
     networks:
       - adsbnet
-    volumes:
-      - readsbjsondata:/var/run/readsb
     command:
       - --dcfilter
       - --device-type=rtlsdr
@@ -244,6 +239,21 @@ docker run --rm -it mikenye/readsb --help
 
 The command line variables given in the examples above should work for the vast majority of ADSB set-ups.
 
+## "MLAT Hub" Functionality
+
+The command line argument `PULLMLAT` can be specified with the syntax of: `MLATHOST:MLATPORT[,MLATHOST:MLATPORT,...]`.
+
+If set, then a separate instance of `readsb` will be started in `--net-only` mode, configured to pull MLAT data from `mlat-client`s running on other containers, listen on TCP port `30105` and forward MLAT data to any clients that connect on this port. This may be useful for tools such as [`graphs1090`](https://hub.docker.com/r/mikenye/graphs1090) and/or [`tar1090`](https://hub.docker.com/r/mikenye/tar1090).
+
+For example:
+
+```yaml
+...
+    environment:
+      - PULLMLAT=piaware:30105,adsbx:30105,rbfeeder:30105
+...
+```
+
 ## Ports
 
 The following default ports are used by readsb and this container:
@@ -255,6 +265,7 @@ The following default ports are used by readsb and this container:
 * `30004` - readsb TCP Beast input listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30005` - readsb TCP Beast output listen port - optional but recommended to allow other applications to receive the data provided by readsb
 * `30104` - readsb TCP Beast input listen port - optional, recommended to leave unmapped unless explicitly needed
+* `30105` - readsb TCP "MLAT Hub" Beast output port - optional. See *"MLAT Hub" Functionality* above.
 
 ## Logging
 
@@ -265,6 +276,10 @@ All logs are to the container's log. It is recommended to enable docker log rota
 Please feel free to [open an issue on the project's GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Changelog
+
+### 20200507
+
+* Implement "MLAT Hub" functionality.
 
 ### 20200506
 

@@ -1,0 +1,37 @@
+#!/usr/bin/with-contenv bash
+#shellcheck shell=bash
+
+if [ ! -z ${PULLMLAT} ]; then
+
+    READSB_BIN="/usr/local/bin/readsb"
+    READSB_CMD=(--net-only)
+
+    # Set inter-field separator to ','
+    export IFS=","
+    # Iterate through comma separated list given by PULLMLAT, eg:
+    # host:port,host:port,...
+    for PULLFROM in $PULLMLAT; do
+        MLATHOST=$(echo $PULLFROM | cut -d ":" -f 1)
+        MLATPORT=$(echo $PULLFROM | cut -d ":" -f 2)
+        READSB_CMD+=(--net-connector=${MLATHOST},${MLATPORT},beast_in)
+    done
+
+    READSB_CMD+=(--forward-mlat)
+    READSB_CMD+=(--net-bi-port=0)
+    READSB_CMD+=(--net-bo-port=30105)
+    READSB_CMD+=(--net-ri-port=0)
+    READSB_CMD+=(--net-ro-port=0)
+    READSB_CMD+=(--net-sbs-port=0)
+    READSB_CMD+=(--stats-every=3600)
+    READSB_CMD+=(--quiet)
+
+    "${READSB_BIN}" "${READSB_CMD[@]}" 2>&1 | awk -W Interactive '{print "[mlat_hub] " $0}'
+
+else
+
+    sleep 3600
+
+fi
+
+    
+    
