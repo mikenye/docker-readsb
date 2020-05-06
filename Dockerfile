@@ -138,7 +138,7 @@ RUN set -x && \
 COPY etc/ /etc/
 
 # Expose ports
-EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp
+EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 30105/tcp
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
