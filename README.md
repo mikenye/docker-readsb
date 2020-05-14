@@ -87,6 +87,7 @@ docker run \
  --device /dev/bus/usb/USB_BUS_NUMBER/USB_DEVICE_NUMBER \
  -p 8080:8080 \
  -p 30005:30005 \
+ -e TZ=YOURTIMEZONE \
  mikenye/readsb \
  --dcfilter \
  --device-type=rtlsdr \
@@ -114,6 +115,7 @@ docker run \
  --device /dev/bus/usb/001/004 \
  -p 8080:8080 \
  -p 30005:30005 \
+ -e TZ=Australia/Perth \
  mikenye/readsb \
  --dcfilter \
  --device-type=rtlsdr \
@@ -145,7 +147,7 @@ Take note of the bus number, and device number. In the output above, its 001 and
 
 An example `docker-compose.xml` file is below:
 
-```shell
+```yaml
 version: '2.0'
 
 networks:
@@ -165,6 +167,8 @@ services:
       - 30005:30005
     networks:
       - adsbnet
+    environment:
+      - TZ=Australia/Perth
     command:
       - --dcfilter
       - --device-type=rtlsdr
@@ -254,6 +258,15 @@ For example:
 ...
 ```
 
+## Runtime Environment Variables
+
+There are a series of available environment variables:
+
+| Environment Variable | Purpose                         | Default |
+| -------------------- | ------------------------------- | ------- |
+| `TZ`                 | Your local timezone (recommended)  | UTC     |
+| `PULLMLAT`           | See above (optional)            |         |
+
 ## Ports
 
 The following default ports are used by readsb and this container:
@@ -276,6 +289,10 @@ All logs are to the container's log. It is recommended to enable docker log rota
 Please feel free to [open an issue on the project's GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Changelog
+
+### 20200514
+
+* Add `TZ` environment variable.
 
 ### 20200507
 
