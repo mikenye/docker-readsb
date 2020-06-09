@@ -15,6 +15,7 @@ RUN set -x && \
         ca-certificates \
         cmake \
         curl \
+        file \
         g++ \
         gcc \
         gnupg \
@@ -116,6 +117,7 @@ RUN set -x && \
         bison \
         cmake \
         curl \
+        file \
         g++ \
         gcc \
         git \

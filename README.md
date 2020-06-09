@@ -143,9 +143,9 @@ Run the command `lsusb` and find your radio. It'll look something like this:
 Bus 001 Device 004: ID 0bda:2832 Realtek Semiconductor Corp. RTL2832U DVB-T
 ```
 
-Take note of the bus number, and device number. In the output above, its 001 and 004 respectively. This is used in the `devices:` section of the `docker-compose.xml`. Change these in your environment as required.
+Take note of the bus number, and device number. In the output above, its 001 and 004 respectively. This is used in the `devices:` section of the `docker-compose.yml`. Change these in your environment as required.
 
-An example `docker-compose.xml` file is below:
+An example `docker-compose.yml` file is below:
 
 ```yaml
 version: '2.0'
