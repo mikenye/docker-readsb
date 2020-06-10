@@ -65,6 +65,12 @@ sudo rmmod dvb_usb_rtl28xxu
 sudo rmmod rtl2832
 ```
 
+## Healthcheck
+
+In order for the container's health check to be the most effective, you should be sure to include `--write-json=/run/readsb`.
+
+If the healthcheck script can't find `/run/readsb/aircraft.json`, it will skip some checks.
+
 ## Up-and-Running with `docker run`
 
 Firstly, plug in your USB radio.
@@ -92,11 +98,9 @@ docker run \
  --dcfilter \
  --device-type=rtlsdr \
  --fix \
- --forward-mlat \
  --json-location-accuracy=2 \
  --lat=YOUR_LATITUDE \
  --lon=YOUR_LONGITUDE \
- --mlat \
  --modeac \
  --ppm=0 \
  --net \
@@ -120,11 +124,9 @@ docker run \
  --dcfilter \
  --device-type=rtlsdr \
  --fix \
- --forward-mlat \
  --json-location-accuracy=2 \
  --lat=-33.33333 \
  --lon=111.11111 \
- --mlat \
  --modeac \
  --ppm=0 \
  --net \
@@ -173,11 +175,9 @@ services:
       - --dcfilter
       - --device-type=rtlsdr
       - --fix
-      - --forward-mlat
       - --json-location-accuracy=2
       - --lat=-33.33333
       - --lon=111.11111
-      - --mlat
       - --modeac
       - --ppm=0
       - --net
@@ -289,6 +289,11 @@ All logs are to the container's log. It is recommended to enable docker log rota
 Please feel free to [open an issue on the project's GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Changelog
+
+### 20200610
+
+* Add Docker healthcheck
+* Add `linux/arm/v6` architecture
 
 ### 20200514
 
