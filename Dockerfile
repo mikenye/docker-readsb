@@ -1,7 +1,7 @@
 FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
-    S6_CMD_ARG0=/usr/local/bin/readsb \
+    S6_CMD_ARG0="/usr/local/bin/readsb" \
     BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320"
 
 # Note, the specific commit of rtlsdr is to address issue #3
@@ -12,6 +12,7 @@ RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
         bison \
+        bc \
         ca-certificates \
         cmake \
         curl \
@@ -19,6 +20,7 @@ RUN set -x && \
         g++ \
         gcc \
         gnupg \
+        jq \
         libc-dev \
         libedit-dev \
         libfl-dev \
@@ -138,9 +140,13 @@ RUN set -x && \
 
 # Copy config files
 COPY etc/ /etc/
+COPY healthcheck.sh /healthcheck.sh
 
 # Expose ports
 EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 30105/tcp
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
+
+# Add healthcheck
+HEALTHCHECK --start-period=30s CMD /healthcheck.sh
