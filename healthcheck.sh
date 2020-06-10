@@ -35,6 +35,49 @@ else
 
 fi
 
+# originally was going to check to make sure ports open, however the user
+# could deliberately close ports, so will leave this out.
+
+# # check port 30001 is open
+# if [ $(netstat -an | grep LISTEN | grep ":30001" | wc -l) -ge 1 ]; then
+#     echo "TCP port 30001 open. HEALTHY"
+# else
+#     echo "TCP port 30001 not open. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
+# # check port 30002 is open
+# if [ $(netstat -an | grep LISTEN | grep ":30002" | wc -l) -ge 1 ]; then
+#     echo "TCP port 30002 open. HEALTHY"
+# else
+#     echo "TCP port 30002 not open. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
+# # check port 30003 is open
+# if [ $(netstat -an | grep LISTEN | grep ":30003" | wc -l) -ge 1 ]; then
+#     echo "TCP port 30003 open. HEALTHY"
+# else
+#     echo "TCP port 30003 not open. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
+# # check port 30004 is open
+# if [ $(netstat -an | grep LISTEN | grep ":30004" | wc -l) -ge 1 ]; then
+#     echo "TCP port 30004 open. HEALTHY"
+# else
+#     echo "TCP port 30004 not open. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
+# # check port 30005 is open
+# if [ $(netstat -an | grep LISTEN | grep ":30005" | wc -l) -ge 1 ]; then
+#     echo "TCP port 30005 open. HEALTHY"
+# else
+#     echo "TCP port 30005 not open. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
 # death count for lighttpd
 LIGHTTPD_DEATHS=$(s6-svdt /run/s6/services/lighttpd | grep -v "exitcode 0" | wc -l)
 if [ $LIGHTTPD_DEATHS -ge 1 ]; then
