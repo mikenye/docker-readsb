@@ -149,4 +149,4 @@ EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 3010
 ENTRYPOINT [ "/init" ]
 
 # Add healthcheck
-HEALTHCHECK --start-period=30s CMD /healthcheck.py
+HEALTHCHECK --start-period=30s CMD /healthcheck.sh
