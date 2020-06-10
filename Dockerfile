@@ -140,6 +140,7 @@ RUN set -x && \
 
 # Copy config files
 COPY etc/ /etc/
+COPY healthcheck.sh /healthcheck.sh
 
 # Expose ports
 EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 30105/tcp
