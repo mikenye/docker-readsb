@@ -1,7 +1,7 @@
 FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
-    S6_CMD_ARG0=/usr/local/bin/readsb \
+    S6_CMD_ARG0="/usr/local/bin/readsb --write-json=/run/readsb" \
     BRANCH_RTLSDR="d794155ba65796a76cd0a436f9709f4601509320"
 
 # Note, the specific commit of rtlsdr is to address issue #3
@@ -12,6 +12,7 @@ RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
         bison \
+        bc \
         ca-certificates \
         cmake \
         curl \
@@ -19,6 +20,7 @@ RUN set -x && \
         g++ \
         gcc \
         gnupg \
+        jq \
         libc-dev \
         libedit-dev \
         libfl-dev \
