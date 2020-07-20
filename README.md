@@ -288,6 +288,9 @@ All logs are to the container's log. It is recommended to enable docker log rota
 
 Please feel free to [open an issue on the project's GitHub](https://github.com/mikenye/docker-readsb/issues).
 
+I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
+
+
 ## Changelog
 
 ### 20200610
