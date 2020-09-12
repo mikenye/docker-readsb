@@ -23,7 +23,7 @@ Tested and working on:
 ## Supported tags and respective Dockerfiles
 
 * `latest` should always contain the latest released versions of `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb`. This image is built nightly from the [`master` branch](https://github.com/mikenye/docker-readsb) [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile) for all supported architectures.
-* `development` ([`master` branch](https://github.com/mikenye/docker-readsb/tree/master), [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile), `amd64` architecture only, built on commit, not recommended for production)
+* `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
 * Specific version and architecture tags are available if required, however these are not regularly updated. It is generally recommended to run `latest`.
 
 ## Multi Architecture Support
