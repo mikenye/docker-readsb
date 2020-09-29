@@ -13,7 +13,7 @@ if [ ! -z ${PULLMLAT} ]; then
     for PULLFROM in $PULLMLAT; do
         MLATHOST=$(echo $PULLFROM | cut -d ":" -f 1)
         MLATPORT=$(echo $PULLFROM | cut -d ":" -f 2)
-        READSB_CMD+=(--net-connector=${MLATHOST},${MLATPORT},beast_in)
+        READSB_CMD+=("--net-connector=${MLATHOST},${MLATPORT},beast_in")
     done
 
     READSB_CMD+=(--forward-mlat)
