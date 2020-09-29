@@ -298,17 +298,19 @@ def main():
         print("Found 'command:' section")
 
     # find current "--gain" argument and log it
+    re_pattern_gain_arg = r'^--gain=([\-\d\.]+)$'
     original_gain = get_service_commandline_value(
         service_name=service_name,
-        re_pattern=r'^--gain=([\-\d\.]+)$',
+        re_pattern=re_pattern_gain_arg,
         commandline_name="--gain",
         docker_compose_yaml=docker_compose_yaml,
     )
 
     # find current "--write-json" argument and log it
+    re_pattern_writejson_arg = r'^--write-json=(.+)$'
     readsb_json_path = get_service_commandline_value(
         service_name=service_name,
-        re_pattern=r'^--write-json=(.+)$',
+        re_pattern=re_pattern_writejson_arg,
         commandline_name="--write-json",
         docker_compose_yaml=docker_compose_yaml,
     )
@@ -332,7 +334,7 @@ def main():
             # pull out existing "--gain" argument
             docker_compose_yaml['services'][service_name]['command'] = remove_service_commandline(
                 service_name=service_name,
-                re_pattern=r'^--gain=([\-\d\.]+)$',
+                re_pattern=re_pattern_gain_arg,
                 docker_compose_yaml=docker_compose_yaml,
             )
 
@@ -370,13 +372,13 @@ def main():
             )
 
             # get metrics from results
-            strong = float(stats_json_data['total']['local']['strong_signals'])
-            total = float(stats_json_data['total']['local']['accepted'][0])
+            strong = stats_json_data['total']['local']['strong_signals']
+            total = stats_json_data['total']['local']['accepted'][0]
             percent_strong = 0.0
             if total == 0.0:
                 print("No messages received!")
             else:
-                percent_strong = round((strong / total) * 100, 2)
+                percent_strong = round((float(strong) / float(total)) * 100, 2)
                 print("Total messages: {total}".format(total=total))
                 print("Strong messages: {percent_strong}".format(percent_strong=percent_strong))
                 print("Percentage strong messages: {percent_strong}".format(
