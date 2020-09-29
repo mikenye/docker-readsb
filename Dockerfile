@@ -8,6 +8,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 # See: https://github.com/mikenye/docker-readsb/issues/3
 # This should be revisited in future when rtlsdr 0.6.1 or newer is released
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -40,25 +42,26 @@ RUN set -x && \
     git config --global advice.detachedHead false && \
     echo "========== Building RTL-SDR ==========" && \
     git clone git://git.osmocom.org/rtl-sdr.git /src/rtl-sdr && \
-    cd /src/rtl-sdr && \
-    #export BRANCH_RTLSDR=$(git tag --sort="-creatordate" | head -1) && \
+    pushd /src/rtl-sdr && \
+    #BRANCH_RTLSDR=$(git tag --sort="-creatordate" | head -1) && \
     #git checkout "tags/${BRANCH_RTLSDR}" && \
     git checkout "${BRANCH_RTLSDR}" && \
     echo "rtl-sdr ${BRANCH_RTLSDR}" >> /VERSIONS && \
     mkdir -p /src/rtl-sdr/build && \
-    cd /src/rtl-sdr/build && \
+    pushd /src/rtl-sdr/build && \
     cmake ../ -DINSTALL_UDEV_RULES=ON -Wno-dev && \
     make -Wstringop-truncation && \
     make -Wstringop-truncation install && \
     cp -v /src/rtl-sdr/rtl-sdr.rules /etc/udev/rules.d/ && \
+    popd && popd && \
     echo "========== Building bladeRF ==========" && \
     git clone --recursive https://github.com/Nuand/bladeRF.git /src/bladeRF && \
-    cd /src/bladeRF && \
-    export BRANCH_BLADERF=$(git tag --sort="-creatordate" | head -1) && \
+    pushd /src/bladeRF && \
+    BRANCH_BLADERF=$(git tag --sort="-creatordate" | head -1) && \
     git checkout "${BRANCH_BLADERF}" && \
     echo "bladeRF ${BRANCH_BLADERF}" >> /VERSIONS && \
     mkdir /src/bladeRF/host/build && \
-    cd /src/bladeRF/host/build && \
+    pushd /src/bladeRF/host/build && \
     cmake \
         -DTREAT_WARNINGS_AS_ERRORS=OFF \
         -DCMAKE_BUILD_TYPE=Release \
@@ -66,6 +69,7 @@ RUN set -x && \
         && \
     make && \
     make install && \
+    popd && popd && \
     echo "========== Downloading bladeRF FPGA Images ==========" && \
     BLADERF_RBF_PATH="/usr/share/Nuand/bladeRF" && \
     mkdir -p "$BLADERF_RBF_PATH" && \
@@ -79,26 +83,28 @@ RUN set -x && \
     curl -o $BLADERF_RBF_PATH/adsbx115.rbf https://www.nuand.com/fpga/adsbx115.rbf && \
     echo "========== Building libiio ==========" && \
     git clone https://github.com/analogdevicesinc/libiio.git /src/libiio && \
-    cd /src/libiio && \
-    export BRANCH_LIBIIO=$(git tag --sort="-creatordate" | head -1) && \
+    pushd /src/libiio && \
+    BRANCH_LIBIIO=$(git tag --sort="-creatordate" | head -1) && \
     git checkout "${BRANCH_LIBIIO}" && \
     echo "libiio ${BRANCH_LIBIIO}" >> /VERSIONS && \
     cmake PREFIX=/usr/local ./ && \
     make && \
     make install && \
+    popd && \
     echo "========== Building libad9361-iio ==========" && \
     git clone https://github.com/analogdevicesinc/libad9361-iio.git /src/libad9361-iio && \
-    cd /src/libad9361-iio && \
-    export BRANCH_LIBAD9361IIO=$(git tag --sort="-creatordate" | head -1) && \
+    pushd /src/libad9361-iio && \
+    BRANCH_LIBAD9361IIO=$(git tag --sort="-creatordate" | head -1) && \
     git checkout "${BRANCH_LIBAD9361IIO}" && \
     echo "libad9361-iio ${BRANCH_LIBAD9361IIO}" >> /VERSIONS && \
     cmake ./ && \
     make && \
     make install && \
+    popd && \
     echo "========== Building readsb ==========" && \
     git clone https://github.com/Mictronics/readsb.git /src/readsb && \
-    cd /src/readsb && \
-    export BRANCH_READSB=$(git tag --sort="-creatordate" | head -1) && \
+    pushd /src/readsb && \
+    BRANCH_READSB=$(git tag --sort="-creatordate" | head -1) && \
     git checkout "${BRANCH_READSB}" && \
     echo "readsb ${BRANCH_READSB}" >> /VERSIONS && \
     make RTLSDR=yes BLADERF=yes PLUTOSDR=yes HAVE_BIASTEE=yes && \
@@ -106,6 +112,7 @@ RUN set -x && \
     cp -v /src/readsb/viewadsb /usr/local/bin/viewadsb && \
     mkdir -p /usr/share/readsb/bladerf && \
     cp -v /src/readsb/bladerf/*.rbf /usr/share/readsb/bladerf/ && \
+    popd && \
     echo "========== Install readsb webapp ==========" && \
     mkdir -p /usr/share/readsb/html && \
     cp -Rv /src/readsb/webapp/src/* /usr/share/readsb/html/ && \
