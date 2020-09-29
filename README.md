@@ -290,47 +290,6 @@ Please feel free to [open an issue on the project's GitHub](https://github.com/m
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
 
-
 ## Changelog
 
-### 20200610
-
-* Add Docker healthcheck
-* Add `linux/arm/v6` architecture
-
-### 20200514
-
-* Add `TZ` environment variable.
-
-### 20200507
-
-* Implement "MLAT Hub" functionality.
-
-### 20200506
-
-* Fix web interface. Web interface port changed from `80` to `8080`.
-
-### 20200501
-
-* Add bladeRF FPGA images
-
-### 20200429
-
-* Change version of `rtl-sdr` to address incompatibility with `RTL2838UHIDIR` hardware. Thanks to Ryan Guzy for troubleshooting.
-
-### 20200320
-
-* Remove `/src/*` during container build, to reduce size of container
-* Linting & clean-up
-
-### 20200317
-
-* Move to single Dockerfile for multi architecture
-* Change `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb` to build from latest released github tag. Versions of each component can be viewed with the command `docker run --rm -it --entrypoint cat mikenye/readsb:latest /VERSIONS`
-* Include `gpg` verification of `s6-overlay`
-* Increase verbosity of docker build output
-* Change build process to use `docker buildx`
-
-### 20200218
-
-* Original image, based on [debian:stable-slim](https://hub.docker.com/_/debian).
+See the project's [commit history](https://github.com/mikenye/docker-readsb/commits/master).

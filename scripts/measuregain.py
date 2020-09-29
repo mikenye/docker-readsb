@@ -45,7 +45,7 @@ def run_command(
     # get output or timeout after 5 mins
     try:
         outs, errs = proc.communicate(timeout=300)
-    except TimeoutExpired:
+    except subprocess.TimeoutExpired:
         proc.kill()
         outs, errs = proc.communicate()
     
@@ -137,6 +137,7 @@ def get_service_commandline_value(
     service_name: str,
     re_pattern: str,
     commandline_name: str,
+    container_name: str,
     docker_compose_yaml,
 ):
     commandline_value = None
@@ -151,7 +152,7 @@ def get_service_commandline_value(
     if commandline_value == None:
         print(
             "ERROR: Service declaration for {container_name} in is missing the '{commandline_name}' argument".format(
-                container_name = args.readsb_container_name,
+                container_name = container_name,
                 commandline_name = commandline_name,
             ),
             file=sys.stderr,
@@ -304,6 +305,7 @@ def main():
         re_pattern=re_pattern_gain_arg,
         commandline_name="--gain",
         docker_compose_yaml=docker_compose_yaml,
+        container_name=args.readsb_container_name,
     )
 
     # find current "--write-json" argument and log it
@@ -313,6 +315,7 @@ def main():
         re_pattern=re_pattern_writejson_arg,
         commandline_name="--write-json",
         docker_compose_yaml=docker_compose_yaml,
+        container_name=args.readsb_container_name,
     )
     
     # TODO: make sure we can get stats.json
