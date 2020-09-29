@@ -45,7 +45,7 @@ def run_command(
     # get output or timeout after 5 mins
     try:
         outs, errs = proc.communicate(timeout=300)
-    except TimeoutExpired:
+    except subprocess.TimeoutExpired:
         proc.kill()
         outs, errs = proc.communicate()
     
