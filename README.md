@@ -20,6 +20,12 @@ Tested and working on:
 * If you run on a different platform (or if you have issues) please raise an issue and let me know!
 * bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
 
+## Deprecation notice
+
+The author of `readsb` (Mictronics) is no longer developing `readsb`, and instead all future development efforts will go into the Protocol Buffer version (`readsb-protobuf`) starting with version v4.0.0 (see [here](https://github.com/Mictronics/readsb#no-longer-under-development)).
+
+I would recommend migrating to the container: [`mikenye/readsb-protobuf`](https://github.com/mikenye/docker-readsb-protobuf) instead of continuing to use this container.
+
 ## Supported tags and respective Dockerfiles
 
 * `latest` should always contain the latest released versions of `rtl-sdr`, `bladeRF`, `libiio`, `libad9361-iio` and `readsb`. This image is built nightly from the [`master` branch](https://github.com/mikenye/docker-readsb) [`Dockerfile`](https://github.com/mikenye/docker-readsb/blob/master/Dockerfile) for all supported architectures.
