@@ -288,7 +288,7 @@ The following default ports are used by readsb and this container:
 
 ## Logging
 
-All logs are to the container's log. It is recommended to enable docker log rotation to prevent container logs from filling up your hard drive. See [How-to-setup-log-rotation-post-installation](https://success.docker.com/article/how-to-setup-log-rotation-post-installation) for details on how to achieve this.
+All logs are to the container's log. It is recommended to enable docker log rotation to prevent container logs from filling up your hard drive. See [Configure the default logging driver](https://docs.docker.com/config/containers/logging/configure/#configure-the-default-logging-driver) for details on how to achieve this.
 
 ## Getting help
 
