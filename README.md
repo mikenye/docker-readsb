@@ -1,8 +1,14 @@
 # mikenye/readsb
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mikenye/docker-readsb/Deploy%20to%20Docker%20Hub)](https://github.com/mikenye/docker-readsb/actions?query=workflow%3A%22Deploy+to+Docker+Hub%22)
+[![Docker Pulls](https://img.shields.io/docker/pulls/mikenye/readsb.svg)](https://hub.docker.com/r/mikenye/readsb)
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/readsb/latest)](https://hub.docker.com/r/mikenye/readsb)
+[![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
+
+
 [Mictronics' `readsb`](https://github.com/Mictronics/readsb) Mode-S/ADSB/TIS decoder for RTLSDR, BladeRF, Modes-Beast and GNS5894 devices, running in a docker container.
 
-Support for RTLSDR, bladeRF and plutoSDR is compiled in. Builds and runs on x86_64, arm32v7 and arm64v8 (see below).
+Support for RTLSDR, bladeRF and plutoSDR is compiled in. Builds and runs on x86, x86_64, arm32v6, arm32v7 and arm64.
 
 This image will configure a software-defined radio (SDR) to receive and decode Mode-S/ADSB/TIS data from aircraft within range, for use with other services such as:
 
@@ -12,13 +18,7 @@ This image will configure a software-defined radio (SDR) to receive and decode M
 * `mikenye/piaware-to-influx` to feed data into your own instance of [InfluxDB](https://docs.influxdata.com/influxdb/), for visualisation with [Grafana](https://grafana.com) and/or other tools
 * Any other tools that can receive Beast, BeastReduce, Basestation or the raw data feed from `readsb` or `dump1090` and their variants
 
-Tested and working on:
-
-* `x86_64` (`amd64`) platform running Ubuntu 16.04.4 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
-* `armv7l` (`arm32v7`) platform (Odroid HC1) running Ubuntu 18.04.1 LTS using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
-* `aarch64` (`arm64v8`) platform (Raspberry Pi 4) running Raspbian Buster 64-bit using an RTL2832U radio (FlightAware Pro Stick Plus Blue)
-* If you run on a different platform (or if you have issues) please raise an issue and let me know!
-* bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
+bladeRF & plutoSDR are untested - I don't own bladeRF or plutoSDR hardware (only RTL2832U as outlined above), but support for the devices is compiled in. If you have the hardware and would be willing to test, please [open an issue on GitHub](https://github.com/mikenye/docker-readsb/issues).
 
 ## Deprecation notice
 
