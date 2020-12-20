@@ -10,6 +10,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+COPY rootfs/ /
+
 RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -143,11 +145,8 @@ RUN set -x && \
         && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
-    cat /VERSIONS
-
-# Copy config files
-COPY etc/ /etc/
-COPY healthcheck.sh /healthcheck.sh
+    cat /VERSIONS && \
+    readsb --version | cut -d ' ' -f2- > /CONTAINER_VERSION
 
 # Expose ports
 EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 30105/tcp
@@ -156,4 +155,4 @@ EXPOSE 30104/tcp 8080/tcp 30001/tcp 30002/tcp 30003/tcp 30004/tcp 30005/tcp 3010
 ENTRYPOINT [ "/init" ]
 
 # Add healthcheck
-HEALTHCHECK --start-period=300s --interval=300s CMD /healthcheck.sh
+HEALTHCHECK --start-period=300s --interval=300s CMD /scripts/healthcheck.sh
