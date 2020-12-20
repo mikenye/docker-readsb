@@ -5,7 +5,6 @@
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/readsb/latest)](https://hub.docker.com/r/mikenye/readsb)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-
 [Mictronics' `readsb`](https://github.com/Mictronics/readsb) Mode-S/ADSB/TIS decoder for RTLSDR, BladeRF, Modes-Beast and GNS5894 devices, running in a docker container.
 
 Support for RTLSDR, bladeRF and plutoSDR is compiled in. Builds and runs on x86, x86_64, arm32v6, arm32v7 and arm64.

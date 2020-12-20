@@ -19,8 +19,7 @@ jobs:
     - name: Run Shellcheck against shell scripts
       run: |
         docker run --rm -i -v "$PWD:/mnt" koalaman/shellcheck:stable $(find . -type f -exec grep -m1 -l -E '^#!.*sh.*' {} \; | grep -v '/.git/')
-        docker run --rm -i -v "$PWD:/mnt" koalaman/shellcheck:stable $(find . -type f -exec grep -m1 -l -E '^#!.*execline.*' {} \; | grep -v '/.git/')
-
+        
   hadolint:
 
     runs-on: ubuntu-latest
